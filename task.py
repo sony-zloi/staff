@@ -22,11 +22,12 @@ def userEnter():
                            'Want do You want to do with that??\n'
                            '1 - if You wanna print this list\n'
                            '2 - if You wanna add an item to list\n'
-                           '3 - if You wanna search employes by last name\n'
-                           '4 - if You wanna print employes by age\n'
-                           '5 - if You wanna print employes by first char of last name\n'
+                           '3 - if You wanna search employees by last name\n'
+                           '4 - if You wanna print employees by age\n'
+                           '5 - if You wanna print employees by first char of last name\n'
                            '6 - if You wanna delete an employee from the list\n'
                            '7 - if You wanna change data\n'
+                           '9 - if You wanna write staff list to file\n'
                            'Or press any key to quit\n'
                            '> '))
     except:
@@ -35,9 +36,19 @@ def userEnter():
     return _enter
 
 
-def recordFile(_searchRes):
-    with open('search_result.txt', 'w') as res:
-        res.write(_searchRes)
+def recordFile(_enter, _searchRes):
+    if _enter == 8:
+        with open('search_result.txt', 'w') as res:
+            res.write(_searchRes)
+
+    elif _enter == 9:
+        # _searchRes = str(_searchRes)
+        with open('staff_all.txt', 'w') as res:
+            for key, value in _searchRes.items():
+                key = str(key)
+                value = str(value)
+                res.write(key + ' => ' + value + '\n')
+            print('Done! Please see file staff_all.txt at current directory')
 
 
 def printDict(_dict):
@@ -61,6 +72,7 @@ def addItem(_dict):
     _dict.update({name: {'phone_number': pNum, 'email': email, 'age': age, 'place': place, 'skype': skype}})
     # _dict.update({name: [pNum, email, age, place, skype]})
     printDict(_dict)
+
 
 
 def delItem(_dict):
@@ -172,10 +184,12 @@ staff = {
         'skype': 'not_cleaner'
     },
 }
+
+
 printDict(staff)
 enter = userEnter()
 
-while 0 < enter <= 7:
+while 0 < enter <= 9:
     if enter == 1:
         printDict(staff)
     elif enter == 2:
@@ -190,6 +204,9 @@ while 0 < enter <= 7:
         delItem(staff)
     elif enter == 7:
         updateItem(staff)
+    elif enter == 9:
+        recordFile(enter, staff)
+
     enter = userEnter()
 
 print('See Ya!!')
