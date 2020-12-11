@@ -27,7 +27,7 @@ def userEnter():
                            '5 - if You wanna print employees by first char of last name\n'
                            '6 - if You wanna delete an employee from the list\n'
                            '7 - if You wanna change data\n'
-                           '9 - if You wanna write staff list to file\n'
+                           '8 - if You wanna write staff list to file\n'
                            'Or press any key to quit\n'
                            '> '))
     except:
@@ -37,18 +37,25 @@ def userEnter():
 
 
 def recordFile(_enter, _searchRes):
-    if _enter == 8:
-        with open('search_result.txt', 'w') as res:
-            res.write(_searchRes)
+    # _searchRes = str(_searchRes)
+    with open('staff_all.txt', 'w') as res:
+        for key, value in _searchRes.items():
+            key = str(key)
+            value = str(value)
+            res.write(key + ' => ' + value + '\n')
+        print('Done! Please see file staff_all.txt at current directory')
 
-    elif _enter == 9:
-        # _searchRes = str(_searchRes)
-        with open('staff_all.txt', 'w') as res:
-            for key, value in _searchRes.items():
-                key = str(key)
-                value = str(value)
-                res.write(key + ' => ' + value + '\n')
-            print('Done! Please see file staff_all.txt at current directory')
+
+
+def saveToFile(_result, _dict):
+    saveOrNot = input('Do you want to save to file?? yes/not: ').lower()
+    if saveOrNot == 'yes':
+        filename = input('Enter filename: ') + '.txt'
+        with open(filename, 'w') as f:
+            for item in _result:
+                f.write(item + ' ==> ' + str(_dict.get(item)) + '\n')
+            print(f'Done!See result in {filename} file\n')
+
 
 
 def printDict(_dict):
@@ -74,7 +81,6 @@ def addItem(_dict):
     printDict(_dict)
 
 
-
 def delItem(_dict):
     name = input('Enter the Last/First/Middile Name which you want to delete: ')
     if name in _dict:
@@ -90,11 +96,17 @@ def searchLastName(_dict):
     last_names = list(_dict.keys())
     search = input('Enter the first char of Last Name searching for: ').lower()
     isTrue = True
+    result = []
     for item in last_names:
-        if item.startswith(search):
-            print(item)
-            print(_dict.get(item))
+        item = item.split()
+        if search in item:
+            result.append(item)
             isTrue = False
+
+    if not isTrue:
+        for i in result:
+            print(i)
+        saveToFile(result, _dict)
 
     if isTrue:
         print('Not found!')
@@ -104,11 +116,19 @@ def searchByFirstChar(_dict):
     staff_lst = list(_dict.keys())
     search = input('Enter the first char of Last Name searching for: ').lower()
     isTrue = True
+    result = []
     for item in staff_lst:
         item.split()
         if search in item[0]:
             isTrue = False
             print(item)
+            result.append(item)
+
+    if not isTrue:
+        for i in result:
+            print(i)
+        saveToFile(result, _dict)
+
     if isTrue:
         print('Not found!')
 
@@ -116,13 +136,18 @@ def searchByFirstChar(_dict):
 def searchByAge(_dict):
     search = int(input('Enter an age searching for: '))
     print()
-    result = ''
+    result = []
     isTrue = True
     for key, value in _dict.items():
         if value.get('age') == search:
-            result += (key + '\n')
+            result.append(key)
             isTrue = False
-    recordFile(result)
+
+    if not isTrue:
+        for i in result:
+            print(i)
+        saveToFile(result, _dict)
+
     if isTrue:
         print('Not found!')
     print()
@@ -204,8 +229,8 @@ while 0 < enter <= 9:
         delItem(staff)
     elif enter == 7:
         updateItem(staff)
-    elif enter == 9:
-        recordFile(enter, staff)
+    elif enter == 8:
+         recordFile(enter, staff)
 
     enter = userEnter()
 
