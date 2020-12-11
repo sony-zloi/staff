@@ -4,6 +4,7 @@
 ввод данных,
 редактирование данных сотрудника,
 удаление сотрудника,
+
 поиск сотрудника по фамилии,
 вывод информации обо всех сотрудниках, указанного возраста, или фамилия которых начинается на указанную букву.
 Организуйте возможность сохранения найденной информации в файл.
@@ -12,24 +13,31 @@
 При старте программы происходит загрузка списка сотрудников из указанного пользователем файла.
 '''
 
+from os import strerror
+
 
 def userEnter():
     try:
-        _enter = int(input('There is a list of firm employee\n'
+        _enter = int(input('There is a list of firm employee\n\n'
                            'Want do You want to do with that??\n'
-                           'Press 1 if You wanna print this list\n'
-                           'Press 2 if You wanna add an item to list\n'
-                           'Press 3 if You wanna search employes by last name\n'
-                           'Press 4 if You wanna print employes by age\n'
-                           'Press 5 if You wanna print employes by first char of last name\n'
-                           'Press 6 if You wanna delete an employee from the list\n'
-                           'Press 7 if You wanna change data\n'
+                           '1 - if You wanna print this list\n'
+                           '2 - if You wanna add an item to list\n'
+                           '3 - if You wanna search employes by last name\n'
+                           '4 - if You wanna print employes by age\n'
+                           '5 - if You wanna print employes by first char of last name\n'
+                           '6 - if You wanna delete an employee from the list\n'
+                           '7 - if You wanna change data\n'
                            'Or press any key to quit\n'
                            '> '))
     except:
         _enter = 0
 
     return _enter
+
+
+def recordFile(_searchRes):
+    with open('search_result.txt', 'w') as res:
+        res.write(_searchRes)
 
 
 def printDict(_dict):
@@ -43,7 +51,7 @@ def addItem(_dict):
     name = input('Enter a Last First and Middle name which you want to add: ')
     pNum = int(input('Enter a phone number: '))
     email = input('Enter an email: ')
-    age = input('Enter a age: ')
+    age = input('Enter an age: ')
     place = input('Enter a place: ')
     skype = input('Enter skype: ')
     # lst = []
@@ -95,14 +103,18 @@ def searchByFirstChar(_dict):
 
 def searchByAge(_dict):
     search = int(input('Enter an age searching for: '))
+    print()
+    result = ''
     isTrue = True
     for key, value in _dict.items():
         if value.get('age') == search:
-            print(key)
+            result += (key + '\n')
             isTrue = False
+    recordFile(result)
     if isTrue:
         print('Not found!')
     print()
+
 
 def updateItem(_dict):
     name = input('Please enter the item which you wanna change??> ')
