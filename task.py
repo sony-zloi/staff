@@ -4,7 +4,6 @@
 ввод данных,
 редактирование данных сотрудника,
 удаление сотрудника,
-
 поиск сотрудника по фамилии,
 вывод информации обо всех сотрудниках, указанного возраста, или фамилия которых начинается на указанную букву.
 Организуйте возможность сохранения найденной информации в файл.
@@ -23,8 +22,8 @@ def userEnter():
                            '1 - if You wanna print this list\n'
                            '2 - if You wanna add an item to list\n'
                            '3 - if You wanna search employees by last name\n'
-                           '4 - if You wanna print employees by age\n'
-                           '5 - if You wanna print employees by first char of last name\n'
+                           '4 - if You wanna search employees by age\n'
+                           '5 - if You wanna search employees by first char of last name\n'
                            '6 - if You wanna delete an employee from the list\n'
                            '7 - if You wanna change data\n'
                            '8 - if You wanna write staff list to file\n'
@@ -36,15 +35,13 @@ def userEnter():
     return _enter
 
 
-def recordFile(_enter, _searchRes):
-    # _searchRes = str(_searchRes)
-    with open('staff_all.txt', 'w') as res:
+def recordFile(_enter, _searchRes):# функция для записи файла при выходе
+    filename = input('Enter the filename for save it: ') + '.txt'
+    with open(filename, 'w') as res:
         for key, value in _searchRes.items():
-            key = str(key)
             value = str(value)
             res.write(key + ' => ' + value + '\n')
-        print('Done! Please see file staff_all.txt at current directory')
-
+        print(f'Done! Please see file {filename} at current directory')
 
 
 def saveToFile(_result, _dict):
@@ -55,7 +52,6 @@ def saveToFile(_result, _dict):
             for item in _result:
                 f.write(item + ' ==> ' + str(_dict.get(item)) + '\n')
             print(f'Done!See result in {filename} file\n')
-
 
 
 def printDict(_dict):
@@ -94,12 +90,12 @@ def delItem(_dict):
 
 def searchLastName(_dict):
     last_names = list(_dict.keys())
-    search = input('Enter the first char of Last Name searching for: ').lower()
+    search = input('Enter the Last Name searching for: ').lower()
     isTrue = True
     result = []
     for item in last_names:
-        item = item.split()
-        if search in item:
+        item2 = item.split()
+        if search in item2:
             result.append(item)
             isTrue = False
 
@@ -109,7 +105,7 @@ def searchLastName(_dict):
         saveToFile(result, _dict)
 
     if isTrue:
-        print('Not found!')
+        print('Not found!\n')
 
 
 def searchByFirstChar(_dict):
@@ -121,7 +117,6 @@ def searchByFirstChar(_dict):
         item.split()
         if search in item[0]:
             isTrue = False
-            print(item)
             result.append(item)
 
     if not isTrue:
@@ -210,11 +205,10 @@ staff = {
     },
 }
 
-
 printDict(staff)
 enter = userEnter()
 
-while 0 < enter <= 9:
+while 0 < enter <= 8:
     if enter == 1:
         printDict(staff)
     elif enter == 2:
@@ -230,8 +224,12 @@ while 0 < enter <= 9:
     elif enter == 7:
         updateItem(staff)
     elif enter == 8:
-         recordFile(enter, staff)
+        recordFile(enter, staff)
 
     enter = userEnter()
 
-print('See Ya!!')
+with open('sfaff_autosave.txt', 'w') as res:
+    for key, value in staff.items():
+        value = str(value)
+        res.write(key + ' => ' + value + '\n')
+    print('See Ya!!! Please see file sfaff_autosave.txt at current directory')
